@@ -9,6 +9,8 @@ Tutto quello che trovate qui lo lascio in Creative Common, però va riportato ch
 | DEV | JAVA | JDK,EDITOR,NETBEANS | In preparazione |
 | DEV | PHP,HTML,JAVASCRIPT | LAMP,XAMPP | In preparazione |
 | DEV | NODEJS | NODEJS,VISUAL STUDIO CODE | In preparazione |
+| DATABASE | MySQL | LAMP,PHPMYADMIN | In preparazione |
+
 
 
 
