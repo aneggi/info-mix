@@ -8,7 +8,7 @@ Tutto quello che trovate qui lo lascio in Creative Common, però va riportato ch
 | ECDL | WRITER,CALC,DRAW | OPENOFFICE,LIBREOFFICE | In preparazione |
 | DEV | JAVA | JDK,EDITOR,NETBEANS | In preparazione |
 | DEV | PHP,HTML,JAVASCRIPT | LAMP,XAMPP | In preparazione |
-| DEV | NODEJS | NODEJS,VISUAL STUDIO CODE | In preparazione |
+| DEV | JS | JAVASCRIPT,NODEJS,VISUAL STUDIO CODE | In preparazione |
 | DEV | GSUITE | Google Apps Script,Javascript | In preparazione |
 | DATABASE | MySQL | LAMP,PHPMYADMIN | In preparazione |
 
