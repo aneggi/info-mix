@@ -1,0 +1,109 @@
+# ----------------------------------------------------------
+# Copy all files in a specific folder to other branches
+# Copyright 2024 Aneggi Alessandro
+# ----------------------------------------------------------
+stages:
+  - copy
+
+variables:
+  SOURCE_ADDRESS: "aneggi/branchfoldersync" # Name of the repository
+  SOURCE_BRANCH: "main" 
+  DESTINATION_BRANCH1: "b2" # If emplty have no effect
+  DESTINATION_BRANCH2: "b3"
+  DESTINATION_BRANCH3: "" 
+  DESTINATION_BRANCH4: ""
+  SOURCE_PATH: "img"
+  DESTINATION_PATH: "img"
+  CI_USER_EMAIL: "alessandro@kilab.eu"
+  CI_USER_NAME: "Auto-sync-img-to-branches"
+
+copy_files:
+  stage: copy
+  only:
+    - main # Guarantee that the script is executed only with a commit on MAIN brach
+  script:
+    - apt-get update -qy
+    - apt-get install -y git 
+    - apt-get install -y rsync
+    - git config --global user.email "$CI_USER_EMAIL"
+    - git config --global user.name "$CI_USER_NAME"
+    - echo "Source Branch:" $SOURCE_BRANCH
+    #- echo "Destination Branch 1:" $DESTINATION_BRANCH1
+    #- echo "Destination Branch 1:" $DESTINATION_BRANCH2
+    #- echo "Destination Branch 1:" $DESTINATION_BRANCH3
+    #- echo "Destination Branch 1:" $DESTINATION_BRANCH4
+    - git clone https://oauth2:$DEPLOY_TOKEN@gitlab.fuss.bz.it/$SOURCE_ADDRESS.git repo
+    - mkdir IMG_temp
+    #- ls -R
+    - cd repo
+    - echo "------COPY TO TEMP-------"
+    - git checkout main
+    - rsync -av --exclude=".git" $SOURCE_PATH ../IMG_temp/
+    #- ls -R
+    - echo "----------------"
+    - |
+      if [ -n "$DESTINATION_BRANCH1" ]; then
+        echo "Brench 1 configured->$DESTINATION_BRANCH1"
+        git checkout $DESTINATION_BRANCH1
+        rsync -avu --exclude=".git" ../IMG_temp/ $DESTINATION_PATH
+        #ls -R
+        git add .
+        git status
+        if [ -z "$(git status --porcelain -- img/)" ]; then
+          echo "No changes to commit.";
+        else
+          echo "PROCESS";
+          git commit -m "Auto-Sync 'IMG' folder from 'main' branch to $DESTINATION_BRANCH1"  
+          git push origin $DESTINATION_BRANCH1 || true
+        fi
+      fi
+    - echo "----------------"
+    - |
+      if [ -n "$DESTINATION_BRANCH2" ]; then
+        echo "Brench 2 configured->$DESTINATION_BRANCH2"
+        git checkout $DESTINATION_BRANCH2
+        rsync -avu --exclude=".git" ../IMG_temp/ $DESTINATION_PATH
+        #ls -R
+        git add .
+        
+        if [ -z "$(git status --porcelain -- img/)" ]; then
+          echo "No changes to commit.";
+        else
+          echo "PROCESS";
+          git commit -m "Auto-Sync 'IMG' folder from 'main' branch to $DESTINATION_BRANCH2"  
+          git push origin $DESTINATION_BRANCH2 || true
+        fi
+      fi
+    - echo "----------------"
+    - |
+      if [ -n "$DESTINATION_BRANCH3" ]; then
+        echo "Brench 3 configured->$DESTINATION_BRANCH3"
+        git checkout $DESTINATION_BRANCH3
+        rsync -avu --exclude=".git" ../IMG_temp/ $DESTINATION_PATH
+        #ls -R
+        git add .
+        if [ -z "$(git status --porcelain -- img/)" ]; then
+          echo "No changes to commit.";
+        else
+          echo "PROCESS";
+          git commit -m "Auto-Sync 'IMG' folder from 'main' branch to $DESTINATION_BRANCH3"
+          git push origin $DESTINATION_BRANCH3 || true
+        fi
+      fi
+    - echo "----------------"
+    - |
+      if [ -n "$DESTINATION_BRANCH4" ]; then
+        echo "Brench 4 configured->$DESTINATION_BRANCH4"
+        git checkout $DESTINATION_BRANCH4
+        rsync -avu --exclude=".git" ../IMG_temp/ $DESTINATION_PATH
+        #ls -R
+        git add .
+        if [ -z "$(git status --porcelain -- img/)" ]; then
+          echo "No changes to commit.";
+        else
+          echo "PROCESS";
+          git commit -m "Auto-Sync 'IMG' folder from 'main' branch to $DESTINATION_BRANCH4"
+          git push origin $DESTINATION_BRANCH4 || true
+        fi
+      fi
+    - echo "BYE BYE"
